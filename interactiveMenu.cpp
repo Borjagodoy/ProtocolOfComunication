@@ -50,6 +50,23 @@ int requestHostMode(){
     }
     return hostType;
 }
+int requestCloseOperation(){
+    bool isNumber = true;
+    int close = 0;
+    printf("Acepta el cierre de la comnicación?:\n");
+    printf("[1] Si\n");
+    printf("[2] No\n");
+    isNumber = scanf("%d", &close);
+    while(close != 1 && close != 2){
+        if( isNumber == 0 ) { 
+            for( int c = getchar(); c != EOF && c != ' ' && c != '\n' ; c = getchar());
+        }
+        printf ("ha selecionado un modo no disponible, 1 para modo Maestra ò 2 para modo esclavo\n");
+        isNumber = scanf("%d", &close);
+        printf("%d", isNumber);
+    }
+    return close;
+}
 int requestSendingMode(){
     int key;
         key=getch();

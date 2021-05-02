@@ -14,7 +14,7 @@ void startComunication(interface_t iface, unsigned char *MACdst, unsigned char t
 
 void recivedChar(interface_t iface);
 
-void sendCharacter(interface_t iface,  unsigned char MACdst[6], unsigned char type[2], unsigned char* payload);
+void sendCharacter(interface_t iface,  unsigned char MACdst[6], unsigned char type[2], unsigned char* payload, int size);
 
 void sendFile(interface_t iface, unsigned char MACdst[6], unsigned char type[2]);
 

@@ -22,4 +22,6 @@ int requestSendingMode();
 
 int selectionProtocolType();
 
+int requestCloseOperation();
+
 #endif

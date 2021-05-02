@@ -2,9 +2,9 @@
 
 using namespace std;
 
-void sendCharacter(interface_t iface,  unsigned char MACdst[6], unsigned char type[2], unsigned char* payload){
+void sendCharacter(interface_t iface,  unsigned char MACdst[6], unsigned char type[2], unsigned char* payload, int size){
     unsigned char *frame = BuildFrame(iface.MACaddr, MACdst, type, payload);
-    SendFrame(&iface, frame, 256);
+    SendFrame(&iface, frame, size);
 }
 
 void recivedChar(interface_t iface){
@@ -31,7 +31,6 @@ unsigned char* initMacdst(unsigned char *MACdst){
 void sendDiscoverTrace(interface_t iface, unsigned char *MACsrc, unsigned char *MACdst, unsigned char type[2]){
    unsigned char *frame = BuildHeader(MACsrc, MACdst, type);
    SendFrame(&iface, frame, sizeof(frame));
-   printf("traza de descubrimiento lanzada %s", frame);
 }
 bool isCorrectType(const unsigned char* type, unsigned char myType[2]){
     unsigned char typeAux[2] = {type[0], type[1]};
@@ -46,7 +45,7 @@ void interactiveMode(interface_t iface, unsigned char *MACdst, unsigned char typ
         if(kbhit()){
             character = getch();
             payload[0] = character;
-            sendCharacter(iface, MACdst, type, payload);
+            sendCharacter(iface, MACdst, type, payload, 1);
         }
         recivedChar(iface);
     }
@@ -77,7 +76,9 @@ void slavecomunication(interface_t iface, unsigned char type[2]){
         printf("[F3] Protocolo paro y espera\n");
         printf("[ESC] Salir \n");
         while(!exit){
-            recivedChar(iface);
+            while(!kbhit()){
+                recivedChar(iface);
+            }
             mode = requestSendingMode();
             if(mode == 1){
                 interactiveMode(iface, mac_dst, type);
@@ -86,6 +87,7 @@ void slavecomunication(interface_t iface, unsigned char type[2]){
             } else if(mode == 3) {
                 printf("Protocolo paro y espera");
                 stopAndWaitProtocol(false, iface, mac_dst, type);
+                exit = true;
             } else if(mode == 0){
                 printf("Adios!\n");
                 exit = true;
@@ -106,7 +108,7 @@ void sendFile(interface_t iface, unsigned char MACdst[6], unsigned char type[2])
     if (ficheroEntrada.is_open()) {
         while (! ficheroEntrada.eof() ) {
             ficheroEntrada >> trama;
-            sendCharacter(iface,  MACdst, type, trama);
+            sendCharacter(iface,  MACdst, type, trama, 256);
             cout << trama << " ";
         }
             ficheroEntrada.close();
@@ -139,15 +141,20 @@ void masterComunication(interface_t iface, unsigned char *MACdst, unsigned char 
     printf("[F3] Protocolo Paro y espera \n");
     printf("[ESC] Salir \n");
     while(!exit){
-        recivedChar(iface);
+        while(!kbhit()){
+            recivedChar(iface);
+        }
         mode = requestSendingMode();
         if(mode == 1){
             interactiveMode(iface, mac_dst, type);
+            exit = true;
         } else if(mode == 2){
             sendFile(iface, mac_dst, type);
+            exit = true;
         } else if(mode == 3) {
                 printf("Protocolo paro y espera");
                 stopAndWaitProtocol(true, iface, mac_dst, type);
+                exit = true;
         } else if(mode == 0){
             printf("Adios!\n");
             exit = true;
@@ -157,7 +164,6 @@ void masterComunication(interface_t iface, unsigned char *MACdst, unsigned char 
     
 }
 void startComunication(interface_t iface, unsigned char *MACdst, unsigned char type[2], int hostType){
-    printf("Comienzo %d", hostType);
     if(hostType == 1){
         printf("Comienzo de la comunicación como maestro");
         masterComunication(iface, MACdst, type);

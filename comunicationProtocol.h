@@ -12,9 +12,9 @@ unsigned char* buildACKHeader(unsigned char direction, unsigned char enumeration
 
 void stopAndWaitProtocol(bool isMaster,interface_t iface, unsigned char *MACdst, unsigned char type[2]);
 
-bool establishmentPhaseMster(int option, interface_t iface, unsigned char *MACdst, unsigned char type[2]);
+void establishmentPhaseMster(int option, interface_t iface, unsigned char *MACdst, unsigned char type[2]);
 
-bool establishmentPhaseSlave(interface_t iface, unsigned char *MACdst, unsigned char type[2]);
+void establishmentPhaseSlave(interface_t iface, unsigned char *MACdst, unsigned char type[2]);
 
 void transferPhase(interface_t iface, char mode,  unsigned char *MACdst, unsigned char type[2]);
 
