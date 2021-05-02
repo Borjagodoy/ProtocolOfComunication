@@ -4,7 +4,7 @@ using namespace std;
 
 void sendCharacter(interface_t iface,  unsigned char MACdst[6], unsigned char type[2], unsigned char* payload){
     unsigned char *frame = BuildFrame(iface.MACaddr, MACdst, type, payload);
-    SendFrame(&iface, frame, sizeof(frame));
+    SendFrame(&iface, frame, 256);
 }
 
 void recivedChar(interface_t iface){

@@ -1,0 +1,32 @@
+/*
+void ReadAndSendProtocolFile(int option, unsigned char& controlTrame) {
+ fstream ficheroEntrada;
+    unsigned char trama[256];
+    int i = 0;
+    ficheroEntrada.open ("EProtoc.txt", ios::in);
+    if (ficheroEntrada.is_open()) {
+        while (! ficheroEntrada.eof() ) {
+            ficheroEntrada >> trama;
+            buildSTXTrame(option, controlTrame, trama);
+            sendCharacter(iface, MACdst, type, controlTrame);
+            //wait response from client.
+            i++;
+        }
+        ficheroEntrada.close();
+    } else cout << "Fichero inexistente" << endl;
+}
+void receivingInformation(interface_t iface, unsigned char *MACdst, unsigned char type[2]){
+    const unsigned char* payload=NULL;
+    unsigned char controlTrame;
+
+    apacket_t received = ReceiveFrame(&iface);
+    while(received.packet == NULL){
+        received = ReceiveFrame(&iface);
+    }
+    payload = received.packet+14;
+    buildACKHeader(payload[0], payload[3], &controlTrame);    
+    sendCharacter(iface, MACdst, type, &controlTrame);
+    if(!isEOT()){
+        receivingInformation(iface, MACdst, type)
+    }
+}*/

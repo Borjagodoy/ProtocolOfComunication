@@ -16,7 +16,7 @@ bool establishmentPhaseMster(int option, interface_t iface, unsigned char *MACds
 
 bool establishmentPhaseSlave(interface_t iface, unsigned char *MACdst, unsigned char type[2]);
 
-void transferPhase();
+void transferPhase(interface_t iface, char mode,  unsigned char *MACdst, unsigned char type[2]);
 
 void closePhase();
 
